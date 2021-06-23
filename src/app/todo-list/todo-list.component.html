@@ -1,0 +1,27 @@
+
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+rel="stylesheet">
+
+<div class="TodoList">
+  <div class="Title">TODO List</div>
+  <span *ngIf="todoitem.length==0; else elseIfBlock"><div class="Congratulations">Congratulations! No more tasks!</div></span>
+   <ng-template #elseIfBlock><span *ngIf="allComplete"><div class="Congratulations">Congratulations! All tasks complete!</div></span></ng-template>
+  <p style="margin-bottom: .5rem;">A place to store your todos</p> 
+  <input style="margin-bottom: 0rem" [(ngModel)]="filter" type="text" placeholder="Filter your to-dos"/>
+  <div *ngFor="let item of todoitem| FilterList:filter; let i = index" >
+
+    <div class="OneTask">
+      {{ i+1 }}.
+      <a *ngIf="item.isComplete==false; else elseBlock"><button class="CompleteButton" (click)="CompleteTask(i)">Complete</button>{{ item.task }}</a>
+      <ng-template #elseBlock><a style="text-decoration: line-through">{{ item.task }}</a></ng-template>
+      <!-- <button class="EditButton" (click)="onEdit(i)">Edit</button> -->
+      <button class="DeleteButton" (click)="onDelete(i)"><span class="material-icons md-18">close</span></button>
+    </div>
+
+  </div>
+  
+    <input  [(ngModel)]="addTask" type="text" placeholder="Add your to-do" (keyup.enter)="AddTodo()" />
+    <button class="AddButton" (click)="AddTodo()" value="Add your to-do">Add</button>
+
+    
+ 
