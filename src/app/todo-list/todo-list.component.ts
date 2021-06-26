@@ -1,10 +1,5 @@
 import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
 import { TodoItem } from './todo-item';
-import { NgModule } from '@angular/core';
-import { listLazyRoutes } from '@angular/compiler/src/aot/lazy_routes';
-import { discardPeriodicTasks } from '@angular/core/testing';
-import { FormsModule } from '@angular/forms';
-import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'app-todo-list',
@@ -29,19 +24,22 @@ export class TodoListComponent {
 
   CompleteTask(x: number) {
     this.todoitem[x].isComplete = true;
-    if (this.todoitem.every(item => item.isComplete == true)) {
-      this.allComplete = true;
-    }
+    this.calcAllComplete();
+  }
+
+  calcAllComplete() {
     this.numLeft = this.calcRemainingTasks()
   }
 
   calcRemainingTasks() {
-    return this.todoitem.filter(s => !s.isComplete).length;
+    let result = this.todoitem.filter(s => !s.isComplete).length;
+    if ( result == 0) { this.allComplete = true }
+    return result;
   }
 
   onDelete(index: number) {
     this.todoitem.splice(index, 1);
-    this.numLeft = this.calcRemainingTasks();
+    this.calcAllComplete()
   }
 
   EditButtonClick(index: number) {
@@ -76,7 +74,7 @@ export class TodoListComponent {
       });
     this.addTask = "";
     this.allComplete = false;
-    this.numLeft = this.calcRemainingTasks()
+    this.calcAllComplete();
     }
   }
 }
